@@ -20,6 +20,9 @@ namespace ELibraryManagement
 
         protected void Button1_Click(object sender, EventArgs e)
         {
+            
+            
+
             try
             {
                 SqlConnection con = new SqlConnection(strcon);
@@ -28,23 +31,25 @@ namespace ELibraryManagement
                     con.Open();
                 }
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Table_1 WHERE Id='"+TextBox1.Text+"' AND password='"+TextBox2.Text+"'",con);
-                SqlDataReader dr = cmd.ExecuteReader();
-                if (dr.HasRows)
+                SqlDataAdapter sd = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                sd.Fill(dt);
+                if (dt.Rows.Count>=1)
                 {
-                    while (dr.Read())
-                    {
-                        Response.Write("<script>alert('" + dr.GetValue(8).ToString() + "');</script>");
-                        Response.Write("<script>alert('Login Success');</script>");
-                    }
-                    
+                    Response.Write("<script>alert('Login Successful')</script>");
+                    cmd.ExecuteNonQuery();
+                    con.Close();
+                    Response.Redirect("/userprofileaspx.aspx");
+
                 }
                 else {
                     Response.Write("<script>alert('Invalid Details');</script>");
+                   
                 }
             }
             catch (Exception ex)
-            { 
-
+            {
+                Response.Write("<script>alert('" + ex.Message + "')</script>");
             }
         }
     }

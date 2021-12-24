@@ -38,7 +38,7 @@ namespace ELibraryManagement
                 
                 if (dt.Rows.Count > 0)
                 {
-                    Response.Write("<script>alert('User already exists');</script>"); //if user exists, no signupgithub
+                    Response.Write("<script>alert('User already exists with That ID.');</script>"); //if user exists, no signupgithub
 
                 }
                 else
@@ -56,7 +56,7 @@ namespace ELibraryManagement
                     cmd.Parameters.AddWithValue("@password", ePassword.Text);
                     cmd.ExecuteNonQuery();
                     con.Close();
-
+                    clearform();
 
                    
                     Response.Redirect("/WebForm1.aspx");
@@ -68,6 +68,19 @@ namespace ELibraryManagement
             {
                 Response.Write("<script>alert('" + ex.Message + "')</script>");
             }
+        }
+        void clearform() //creating a func to clear textboxes
+        {
+            eStudentName.Text = "";
+            eDOB.Text = "";
+            eContact.Text = "";
+            eEmail.Text = "";
+            eState.Text = "";
+            eCity.Text = "";
+            ePin.Text = "";
+            eAddress.Text = "";
+            eId.Text = "";
+            ePassword.Text = "";
         }
     }
 }
