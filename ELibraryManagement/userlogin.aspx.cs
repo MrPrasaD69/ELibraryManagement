@@ -31,26 +31,28 @@ namespace ELibraryManagement
                     con.Open();
                 }
                 SqlCommand cmd = new SqlCommand("SELECT * FROM Table_1 WHERE Id='"+TextBox1.Text+"' AND password='"+TextBox2.Text+"'",con);
-                SqlDataAdapter sd = new SqlDataAdapter(cmd);
-                DataTable dt = new DataTable();
-                sd.Fill(dt);
-                if (dt.Rows.Count>=1)
+                SqlDataReader dr = cmd.ExecuteReader();
+                if (dr.HasRows)
                 {
-                    Response.Write("<script>alert('Login Successful')</script>");
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                    Response.Redirect("/userprofileaspx.aspx");
-
+                    while (dr.Read())
+                    {
+                        //making session variables after login is successful.
+                        Session["ID"]= dr.GetValue(8).ToString();                       
+                        Session["role"] = "user";
+                        
+                        Response.Redirect("homepage.aspx");
+                    }
                 }
-                else {
-                    Response.Write("<script>alert('Invalid Details');</script>");
-                   
+                else
+                {
+                    Response.Write("<script>alert('Invalid credentials');</script>");
                 }
             }
             catch (Exception ex)
             {
                 Response.Write("<script>alert('" + ex.Message + "')</script>");
             }
+
         }
     }
 }
